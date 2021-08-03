@@ -115,8 +115,7 @@ def start_video_stream():
 
             except:
                 is_human = False
-                #ovaj dio treba testirat
-                #smisao ako je ulovio da si uso u cucanj makar ces u sljedecem frameu bit ne human nemoj dat da je krivo
+                
                 if squat_pos == 0:
                     socketio.emit("squat_position", "undefined")
                 pass                     
