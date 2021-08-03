@@ -102,13 +102,15 @@ def start_video_stream():
                 squat_pos = 1 if (squat_right_angle <= 120 or squat_left_angle <= 120) else 0
                 if prev_squat_pos - squat_pos == 1:
                     socketio.emit("squat_counter", "success")
-                    socketio.emit("squat_position", "squat")
                     count_of_squats +=1
                     #print("$$$$ LEFT ANGLE (sleep) $$$$: ", squat_left_angle)
                     #print("$$$$ RIGHT ANGLE (sleep) $$$$: ", squat_right_angle)
-                    time.sleep(1)
+                    #time.sleep(1)
                 socketio.emit("squat_position", "standing")
                 prev_squat_pos = squat_pos
+                
+                if prev_squat_pos == 1:
+                    socketio.emit("squat_position", "squat")    
                 #print("####################NUMBER OF SQUATS####################", count_of_squats)
 
             except:
@@ -122,7 +124,7 @@ def start_video_stream():
             image = TfPoseEstimator.draw_humans(image, humans, imgcopy=False)
             image = cv2.resize(image, (0, 0), fx=0.65, fy=0.65)
             
-            if is_human:
+            if is_human or squat_pos:
                 image = cv2.copyMakeBorder(image, top=bordersize, bottom=bordersize, left=bordersize, right=bordersize, borderType=cv2.BORDER_CONSTANT, value=(0,255,0))
             else:
                 image = cv2.copyMakeBorder(image, top=bordersize, bottom=bordersize, left=bordersize, right=bordersize, borderType=cv2.BORDER_CONSTANT, value=(0,0,255))
@@ -163,6 +165,10 @@ class VideoStream:
 
     # Variable to control when the camera is stopped
         self.stopped = False
+    
+    def __del__(self):
+        #releasing camera
+        self.stream.release()
 
     def start(self):
     # Start the thread that reads frames from the video stream
