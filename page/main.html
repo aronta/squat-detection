@@ -68,7 +68,7 @@
     <script>
       $(document).ready(function(){
         // sending a connect request to the server.
-        var socket = io.connect('http://localhost:5000');
+        var socket = io.connect(window.location.origin);
         var position_stand = $('#position_standing');
         var position_squat = $('#position_squating');
         var position_undefined = $('#position_undefined');

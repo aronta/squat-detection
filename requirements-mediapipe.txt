@@ -1,0 +1,6 @@
+flask
+flask-socketio
+opencv-contrib-python
+numpy
+scipy
+mediapipe
